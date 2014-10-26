@@ -11,7 +11,7 @@ ninja.privateKey = {
 				);
 	},
 	getECKeyFromAdding: function (privKey1, privKey2) {
-		var n = EllipticCurve.getSECCurveByName("secp256k1").getN();
+		var n = EllipticCurve.getSECCurveByName("X9_62_prime256v1").getN();
 		var ecKey1 = new Bitcoin.ECKey(privKey1);
 		var ecKey2 = new Bitcoin.ECKey(privKey2);
 		// if both keys are the same return null
@@ -23,7 +23,7 @@ ninja.privateKey = {
 		return combinedPrivateKey;
 	},
 	getECKeyFromMultiplying: function (privKey1, privKey2) {
-		var n = EllipticCurve.getSECCurveByName("secp256k1").getN();
+		var n = EllipticCurve.getSECCurveByName("X9_62_prime256v1").getN();
 		var ecKey1 = new Bitcoin.ECKey(privKey1);
 		var ecKey2 = new Bitcoin.ECKey(privKey2);
 		// if both keys are the same return null
@@ -152,7 +152,7 @@ ninja.privateKey = {
 
 					var factorb = Bitcoin.Util.dsha256(seedb);
 
-					var ps = EllipticCurve.getSECCurveByName("secp256k1");
+					var ps = EllipticCurve.getSECCurveByName("X9_62_prime256v1");
 					var privateKey = BigInteger.fromByteArrayUnsigned(passfactor).multiply(BigInteger.fromByteArrayUnsigned(factorb)).remainder(ps.getN());
 
 					decrypted = privateKey.toByteArrayUnsigned();
@@ -216,7 +216,7 @@ ninja.privateKey = {
 			var passfactor = BigInteger.fromByteArrayUnsigned(passfactorBytes);
 
 			// 5) Compute the elliptic curve point G * passfactor, and convert the result to compressed notation (33 bytes)
-			var ellipticCurve = EllipticCurve.getSECCurveByName("secp256k1");
+			var ellipticCurve = EllipticCurve.getSECCurveByName("X9_62_prime256v1");
 			var passpoint = ellipticCurve.getG().multiply(passfactor).getEncoded(1);
 
 			// 6) Convey ownersalt and passpoint to the party generating the keys, along with a checksum to ensure integrity.
@@ -258,7 +258,7 @@ ninja.privateKey = {
 		// 3) ECMultiply passpoint by factorb. Use the resulting EC point as a public key and hash it into a Bitcoin
 		// address using either compressed or uncompressed public key methodology (specify which methodology is used
 		// inside flagbyte). This is the generated Bitcoin address, call it generatedaddress.
-		var ec = EllipticCurve.getSECCurveByName("secp256k1").getCurve();
+		var ec = EllipticCurve.getSECCurveByName("X9_62_prime256v1").getCurve();
 		var generatedPoint = ec.decodePointHex(ninja.publicKey.getHexFromByteArray(passpoint));
 		var generatedBytes = generatedPoint.multiply(BigInteger.fromByteArrayUnsigned(factorB)).getEncoded(compressed);
 		var generatedAddress = (new Bitcoin.Address(Bitcoin.Util.sha256ripe160(generatedBytes))).toString();
@@ -316,7 +316,7 @@ ninja.publicKey = {
 		return Crypto.util.bytesToHex(pubKeyByteArray).toString().toUpperCase();
 	},
 	getByteArrayFromAdding: function (pubKeyHex1, pubKeyHex2) {
-		var ecparams = EllipticCurve.getSECCurveByName("secp256k1");
+		var ecparams = EllipticCurve.getSECCurveByName("X9_62_prime256v1");
 		var curve = ecparams.getCurve();
 		var ecPoint1 = curve.decodePointHex(pubKeyHex1);
 		var ecPoint2 = curve.decodePointHex(pubKeyHex2);
@@ -327,7 +327,7 @@ ninja.publicKey = {
 		return pubKey;
 	},
 	getByteArrayFromMultiplying: function (pubKeyHex, ecKey) {
-		var ecparams = EllipticCurve.getSECCurveByName("secp256k1");
+		var ecparams = EllipticCurve.getSECCurveByName("X9_62_prime256v1");
 		var ecPoint = ecparams.getCurve().decodePointHex(pubKeyHex);
 		var compressed = (ecPoint.compressed && ecKey.compressed);
 		// if both points are the same return null
@@ -341,7 +341,7 @@ ninja.publicKey = {
 	},
 	// used by unit test
 	getDecompressedPubKeyHex: function (pubKeyHexComp) {
-		var ecparams = EllipticCurve.getSECCurveByName("secp256k1");
+		var ecparams = EllipticCurve.getSECCurveByName("X9_62_prime256v1");
 		var ecPoint = ecparams.getCurve().decodePointHex(pubKeyHexComp);
 		var pubByteArray = ecPoint.getEncoded(0);
 		var pubHexUncompressed = ninja.publicKey.getHexFromByteArray(pubByteArray);

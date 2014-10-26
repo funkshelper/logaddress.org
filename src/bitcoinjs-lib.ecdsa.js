@@ -1,6 +1,6 @@
 //https://raw.github.com/bitcoinjs/bitcoinjs-lib/e90780d3d3b8fc0d027d2bcb38b80479902f223e/src/ecdsa.js
 Bitcoin.ECDSA = (function () {
-	var ecparams = EllipticCurve.getSECCurveByName("secp256k1");
+	var ecparams = EllipticCurve.getSECCurveByName("X9_62_prime256v1");
 	var rng = new SecureRandom();
 
 	var P_OVER_FOUR = null;
